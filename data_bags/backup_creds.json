@@ -1,0 +1,11 @@
+{
+  "id": "backup_creds",
+  "username": "backup",
+  "password": "c-kr1t",
+  "tenant_name": "backup-tenant",
+  "tenant_id": "12345678910",
+  "auth_url": "https://ntt.region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/",
+  "comment": "backup user",
+  "region_name": "region-a.geo-1",
+  "backup_key": "abcdefghijklmnopqrstuvwxyz"
+}
