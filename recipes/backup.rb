@@ -1,6 +1,7 @@
+include_recipe "python"
+
 package "python-m2crypto"
 package "python-crypto"
-package "python-swiftclient"
 
 begin
   creds = data_bag_item('percona', 'backup_creds')
@@ -28,16 +29,23 @@ directory "/etc/mysql-backup" do
 end
 
 if !creds.nil?
-  template "/etc/mysql-backup/.swiftenv" do
-    source    "swift_env.erb"
-    mode      0644
-    action    :create
-    variables({ :tenant_name => creds['tenant_name'],
-                :tenant_id => creds['tenant_id'],
-                :username    => creds['username'],
-                :auth_url    => creds['auth_url'],
-                :region_name => creds['region_name'],
-                :password    => creds['password'] })
+  if node['percona'].has_key?('hpcloud') and node['percona']['hpcloud']
+
+    python_pip "python-swiftclient" do
+      action :install
+    end
+  
+    template "/etc/mysql-backup/.swiftenv" do
+      source    "swift_env.erb"
+      mode      0644
+      action    :create
+      variables({ :tenant_name => creds['tenant_name'],
+                  :tenant_id => creds['tenant_id'],
+                  :username    => creds['username'],
+                  :auth_url    => creds['auth_url'],
+                  :region_name => creds['region_name'],
+                  :password    => creds['password'] })
+    end
   end
 
   # AES KEY
