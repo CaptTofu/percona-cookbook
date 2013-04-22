@@ -59,10 +59,13 @@ template "/etc/mysql/my.cnf" do
   mode      0644
   action    :create
   variables({ 
+    # TODO: we're inconsistent here, some variables set here, others picked from the 
+    # node directly in the template
     :wsrep_cluster_address => wsrep_cluster_address, 
     # are there cases when we would want this to be the private ip?
     # use node.set['percona']['multi_az_cluster'] as a flag for requiring the public ip?
-    :wsrep_node_address    => wsrep_node_address
+    :wsrep_node_address    => wsrep_node_address,
+    :xtrabackup_password   => node['percona']['xtrabackup_password']
   })
 end
 
@@ -117,5 +120,5 @@ end
 # Install the clustercheck service
 include_recipe "percona::clustercheck"
 
-# Install backups
-include_recipe "percona::backup"
+# Install backups (needs edb/environment based db lookup fix)
+# include_recipe "percona::backup"
