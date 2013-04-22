@@ -1,3 +1,4 @@
+name              "percona"
 maintainer        "Patrick Galbraith"
 maintainer_email  "patg@patg.net"
 license           "Apache 2.0"
