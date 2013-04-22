@@ -30,3 +30,21 @@ link "/usr/local/bin/clustercheck" do
   notifies :restart, resources(:service => "xinetd")
 end
 
+# setup the mysql client libs so that we can set a password
+node.set['build_essential']['compiletime'] = true
+include_recipe "build-essential"
+include_recipe "percona::client"
+package "libmysqlclient-dev" do
+  action :nothing
+end.run_action(:install)
+chef_gem "mysql"
+
+mysql_connection_info = {:host => "localhost", :username => 'root', :password => node['percona']['root_password']}
+
+mysql_database_user 'clustercheck' do
+  connection mysql_connection_info
+  host 'localhost'
+  password node['percona']['clustercheck_password']
+  privileges [:process]
+  action :grant
+end

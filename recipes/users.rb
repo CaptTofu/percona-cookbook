@@ -16,12 +16,3 @@ mysql_database_user 'xtrabackup' do
   privileges ['reload', 'lock tables', 'replication slave', 'replication client']
   action :grant
 end
-
-mysql_database_user 'clustercheck' do
-  connection mysql_connection_info
-  host 'localhost'
-  password node['percona']['xtrabackup_password']
-  privileges [:process]
-  action :grant
-end
-
