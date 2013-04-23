@@ -10,7 +10,6 @@ chef_gem "mysql"
 
 begin
   global_db_data_bag = data_bag_item('percona', 'applications')
-
 rescue => e
   Chef::Log.debug("unable to find global db data bag")
   Chef::Log.debug( e.backtrace.join( "\n" ) )
